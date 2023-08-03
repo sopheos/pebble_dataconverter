@@ -1,6 +1,7 @@
 {
     "name": "sopheos/pebble_dataconverter",
     "description": "Data Mapper",
+    "license": "MIT",
     "require": {
         "php": ">=8.1.0"
     },
