@@ -1,0 +1,17 @@
+{
+    "name": "sopheos/pebble_dataconverter",
+    "description": "Data Mapper",
+    "require": {
+        "php": ">=8.1.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "Pebble\\DataConverter\\": "src/"
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
