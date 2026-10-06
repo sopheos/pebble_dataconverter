@@ -8,6 +8,10 @@ use PHPUnit\Framework\TestCase;
  */
 class BooleanDecodeConverterTest extends TestCase
 {
+    // -------------------------------------------------------------------------
+    // Nominal
+    // -------------------------------------------------------------------------
+
     public function testNull()
     {
         $converter = BooleanDecodeConverter::create();
@@ -39,5 +43,27 @@ class BooleanDecodeConverterTest extends TestCase
 
         $actual = $converter('0');
         self::assertFalse($actual);
+    }
+
+    // -------------------------------------------------------------------------
+    // Edge cases
+    // -------------------------------------------------------------------------
+
+    public function testNonNumericStringsAreFalse()
+    {
+        $converter = BooleanDecodeConverter::create();
+
+        self::assertFalse($converter('true'));
+        self::assertFalse($converter('yes'));
+        self::assertTrue($converter('2'));
+    }
+
+    public function testNonStringValuesUseTruthiness()
+    {
+        $converter = BooleanDecodeConverter::create();
+
+        self::assertFalse($converter(false));
+        self::assertTrue($converter([1]));
+        self::assertFalse($converter([]));
     }
 }

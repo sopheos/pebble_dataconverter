@@ -8,6 +8,10 @@ use PHPUnit\Framework\TestCase;
  */
 class JsonEncodeConverterTest extends TestCase
 {
+    // -------------------------------------------------------------------------
+    // Nominal
+    // -------------------------------------------------------------------------
+
     public function testArray()
     {
         $converter = JsonEncodeConverter::create();
@@ -32,5 +36,23 @@ class JsonEncodeConverterTest extends TestCase
         $converter = JsonEncodeConverter::create();
         $actual = $converter('Yolo !');
         self::assertNull($actual);
+    }
+
+    // -------------------------------------------------------------------------
+    // Edge cases
+    // -------------------------------------------------------------------------
+
+    public function testScalarsAndNullGiveNull()
+    {
+        $converter = JsonEncodeConverter::create();
+
+        self::assertNull($converter(null));
+        self::assertNull($converter(5));
+        self::assertNull($converter(true));
+    }
+
+    public function testOnlyPublicPropertiesAreEncoded()
+    {
+        self::assertSame('{"calls":0}', JsonEncodeConverter::create()(new Account));
     }
 }

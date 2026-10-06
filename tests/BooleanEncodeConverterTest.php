@@ -8,6 +8,10 @@ use PHPUnit\Framework\TestCase;
  */
 class BooleanEncodeConverterTest extends TestCase
 {
+    // -------------------------------------------------------------------------
+    // Nominal
+    // -------------------------------------------------------------------------
+
     public function testNull()
     {
         $converter = BooleanEncodeConverter::create();
@@ -30,5 +34,18 @@ class BooleanEncodeConverterTest extends TestCase
 
         $actual = $converter(false);
         self::assertSame(0, $actual);
+    }
+
+    // -------------------------------------------------------------------------
+    // Edge cases
+    // -------------------------------------------------------------------------
+
+    public function testUsesTruthiness()
+    {
+        $converter = BooleanEncodeConverter::create();
+
+        self::assertSame(1, $converter('no'));
+        self::assertSame(0, $converter('0'));
+        self::assertSame(0, $converter(''));
     }
 }

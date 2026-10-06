@@ -1,6 +1,6 @@
 {
     "name": "sopheos/pebble_dataconverter",
-    "description": "Data Mapper",
+    "description": "Composable converters to decode, map and hydrate structured data",
     "license": "MIT",
     "require": {
         "php": ">=8.1.0"

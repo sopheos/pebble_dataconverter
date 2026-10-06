@@ -8,6 +8,10 @@ use PHPUnit\Framework\TestCase;
  */
 class CollectionConverterTest extends TestCase
 {
+    // -------------------------------------------------------------------------
+    // Nominal
+    // -------------------------------------------------------------------------
+
     public function testOk()
     {
         $converter = self::getConverter();
@@ -34,5 +38,38 @@ class CollectionConverterTest extends TestCase
         return CollectionConverter::create(function ($input) {
             return $input && is_string($input) ? mb_strtoupper($input) : null;
         });
+    }
+
+    // -------------------------------------------------------------------------
+    // Edge cases
+    // -------------------------------------------------------------------------
+
+    public function testKeysArePreserved()
+    {
+        $actual = self::getConverter()(['a' => 'one', 5 => 'two']);
+
+        self::assertSame(['a' => 'ONE', 5 => 'TWO'], $actual);
+    }
+
+    public function testTraversableIsConvertedToArray()
+    {
+        $actual = self::getConverter()(new ArrayIterator(['x' => 'one']));
+
+        self::assertSame(['x' => 'ONE'], $actual);
+    }
+
+    public function testNullGivesEmptyArray()
+    {
+        self::assertSame([], self::getConverter()(null));
+    }
+
+    public function testRuleCanBeAMapOrAClass()
+    {
+        $converter = CollectionConverter::create(Person::class);
+        $actual = $converter([['name' => 'Toto'], ['name' => 'Titi']]);
+
+        self::assertCount(2, $actual);
+        self::assertInstanceOf(Person::class, $actual[1]);
+        self::assertSame('Titi', $actual[1]->name);
     }
 }

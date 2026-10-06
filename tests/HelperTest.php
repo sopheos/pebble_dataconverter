@@ -12,6 +12,10 @@ use PHPUnit\Framework\TestCase;
  */
 class HelperTest extends TestCase
 {
+    // -------------------------------------------------------------------------
+    // Nominal
+    // -------------------------------------------------------------------------
+
     public function testInterface()
     {
         $actual = Helpers::parseRule(Converter::create());
@@ -54,5 +58,19 @@ class HelperTest extends TestCase
     {
         $actual = Helpers::parseRule(0);
         self::assertNull($actual);
+    }
+
+    // -------------------------------------------------------------------------
+    // Edge cases
+    // -------------------------------------------------------------------------
+
+    public function testFunctionNameIsACallback()
+    {
+        self::assertInstanceOf(CallbackConverter::class, Helpers::parseRule('strtoupper'));
+    }
+
+    public function testUnknownStringIsNull()
+    {
+        self::assertNull(Helpers::parseRule('NoSuchClassOrFunction'));
     }
 }

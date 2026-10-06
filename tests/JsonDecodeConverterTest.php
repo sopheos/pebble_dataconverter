@@ -8,6 +8,10 @@ use PHPUnit\Framework\TestCase;
  */
 class JsonDecodeConverterTest extends TestCase
 {
+    // -------------------------------------------------------------------------
+    // Nominal
+    // -------------------------------------------------------------------------
+
     public function testOk()
     {
         $converter = JsonDecodeConverter::create();
@@ -21,5 +25,29 @@ class JsonDecodeConverterTest extends TestCase
         $converter = JsonDecodeConverter::create();
         $actual = $converter(json_encode("test"));
         self::assertNull($actual);
+    }
+
+    // -------------------------------------------------------------------------
+    // Edge cases
+    // -------------------------------------------------------------------------
+
+    public function testNonStringPassesThrough()
+    {
+        $converter = JsonDecodeConverter::create();
+
+        self::assertSame(['a' => 1], $converter(['a' => 1]));
+        self::assertNull($converter(null));
+        self::assertSame(5, $converter(5));
+    }
+
+    public function testInvalidJsonGivesNull()
+    {
+        self::assertNull(JsonDecodeConverter::create()('{invalid'));
+    }
+
+    public function testObjectsAreDecodedAsArrays()
+    {
+        self::assertSame(['a' => ['b' => 1]], JsonDecodeConverter::create()('{"a":{"b":1}}'));
+        self::assertSame([], JsonDecodeConverter::create()('[]'));
     }
 }
